@@ -26,8 +26,6 @@ let chatMap = {};       // Map from chat ID to chat object
 let messagesByChat = {}; // Map from chat ID to array of messages
 let mediaFiles = {};    // Map from media filename to media file path
 
-const MY_ID = '8:demart300980'; // Your Skype user ID for message ownership detection
-
 // Returns initials from a display name (e.g., 'John Doe' -> 'JD')
 function getInitials(name) {
   if (!name) return '?';
@@ -158,37 +156,28 @@ function renderMessages(chatId) {
   const box = document.getElementById('messages');
   box.innerHTML = '';
   msgs.forEach(msg => {
-    const isOwn = msg.from === MY_ID; // Is this message sent by the current user?
     const row = document.createElement('div');
-    row.className = 'message-row ' + (isOwn ? 'own' : 'other');
+    row.className = 'message-row';
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    // Show author only for messages not sent by the current user
-    if (!isOwn) {
-      const author = document.createElement('span');
-      author.className = 'author';
-      author.textContent = msg.displayName || msg.from || '';
-      bubble.appendChild(author);
-    }
-    // Message content (may include HTML and images)
+    const author = document.createElement('span');
+    author.className = 'author';
+    author.textContent = msg.displayName || msg.from || '';
+    bubble.appendChild(author);
     let content = msg.content || '';
-    // Replace links to images with <img> tags
     content = content.replace(/<a href=\"(https?:[^\"]+)\"[^>]*>[^<]*<\/a>/g, (m, url) => {
       if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
         return `<img src="${url}" alt="image" />`;
       }
       return `<a href="${url}" target="_blank">${url}</a>`;
     });
-    // Insert images from media index if referenced
     const mediaMatch = content.match(/OriginalName v=\"([^\"]+)\"/);
     if (mediaMatch && mediaFiles[mediaMatch[1]]) {
       content += `<br><img src="${mediaFiles[mediaMatch[1]]}" alt="media" />`;
     }
-    // Add message content to the bubble
     const cont = document.createElement('span');
     cont.innerHTML = content;
     bubble.appendChild(cont);
-    // Add message time
     const time = document.createElement('span');
     time.className = 'time';
     time.textContent = formatDate(msg.originalarrivaltime || msg.version);
