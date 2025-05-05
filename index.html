@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Skype Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    #app {
+      display: flex;
+      height: 100vh;
+    }
+    #chat-list {
+      width: 320px;
+      background: #f4f4f4;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    #chat-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      transition: background 0.2s;
+      min-height: 56px;
+    }
+    #chat-list li.active {
+      background: #e0eaff;
+      font-weight: bold;
+    }
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #bcd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .chat-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .chat-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #222;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-last {
+      font-size: 13px;
+      color: #888;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    #messages {
+      flex: 1;
+      padding: 32px 0 32px 0;
+      overflow-y: auto;
+      background: #e9f0fa;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+    .message-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      margin-bottom: 2px;
+    }
+    .message-row.own {
+      justify-content: flex-end;
+    }
+    .bubble {
+      max-width: 60%;
+      background: #fff;
+      border-radius: 18px;
+      padding: 10px 16px;
+      box-shadow: 0 2px 8px #0001;
+      font-size: 15px;
+      position: relative;
+      margin: 2px 12px;
+      word-break: break-word;
+      display: flex;
+      flex-direction: column;
+    }
+    .message-row.own .bubble {
+      background: #d2eaff;
+      border-bottom-right-radius: 6px;
+      border-bottom-left-radius: 18px;
+      align-items: flex-end;
+    }
+    .message-row.other .bubble {
+      background: #fff;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 18px;
+      align-items: flex-start;
+    }
+    .bubble .author {
+      font-weight: bold;
+      font-size: 13px;
+      color: #1976d2;
+      margin-bottom: 2px;
+    }
+    .bubble .time {
+      color: #888;
+      font-size: 11px;
+      margin-top: 4px;
+      align-self: flex-end;
+    }
+    .bubble img {
+      max-width: 250px;
+      max-height: 250px;
+      display: block;
+      margin-top: 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .bubble a {
+      color: #1976d2;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <ul id="chat-list"></ul>
+    <div id="messages"></div>
+  </div>
+  <script src="parser.js"></script>
+</body>
+</html> 
