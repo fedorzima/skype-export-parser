@@ -2,6 +2,8 @@
 
 A web-based viewer for exported Skype chat history (messages.json). Easily browse, search, and analyze your Skype conversations and attachments in your browser.
 
+![Screenshot](screenshot.png)
+
 ## Features
 - Parses and displays Skype chat history from exported `messages.json` files
 - Shows chat list, message history, and media attachments
