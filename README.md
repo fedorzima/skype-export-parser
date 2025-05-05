@@ -1,6 +1,6 @@
-# Skype Parser Export
+# Skype Export Reader
 
-A simple web-based tool for viewing and analyzing exported Skype chat data.
+A web-based viewer for exported Skype chat history (messages.json). Easily browse, search, and analyze your Skype conversations and attachments in your browser.
 
 ## Features
 - Parses and displays Skype chat history from exported `messages.json` files
