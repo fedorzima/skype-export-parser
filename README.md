@@ -18,6 +18,9 @@ A web-based viewer for exported Skype chat history (messages.json). Easily brows
 - `index.html` — Main HTML file for the web interface
 
 ## How to Use
+
+> **Export your Skype data:** You can export your Skype chat history and media from the official Skype export page: [https://secure.skype.com/en/data-export](https://secure.skype.com/en/data-export)
+
 1. **Export your Skype data** from Skype (usually via Microsoft privacy dashboard)
 2. Place `messages.json` (and optionally `endpoints.json`, `media/`) in the project folder
 3. Start a local server in the project directory:
