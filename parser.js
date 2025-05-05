@@ -25,6 +25,7 @@ let allChats = [];      // Array of all chat objects
 let chatMap = {};       // Map from chat ID to chat object
 let messagesByChat = {}; // Map from chat ID to array of messages
 let mediaFiles = {};    // Map from media filename to media file path
+let MY_ID = null; // Will be set from messages.json
 
 // Returns initials from a display name (e.g., 'John Doe' -> 'JD')
 function getInitials(name) {
@@ -77,6 +78,11 @@ async function main() {
   } catch (e) {
     document.getElementById('app').innerHTML = '<div style="margin:auto">Failed to load messages.json. Open index.html via a local server.</div>';
     return;
+  }
+
+  // Set MY_ID from userId in messages.json
+  if (data && data.userId) {
+    MY_ID = data.userId;
   }
 
   // 2. Index chats and messages from the loaded data
@@ -156,28 +162,37 @@ function renderMessages(chatId) {
   const box = document.getElementById('messages');
   box.innerHTML = '';
   msgs.forEach(msg => {
+    const isOwn = msg.from === MY_ID; // Is this message sent by the current user?
     const row = document.createElement('div');
-    row.className = 'message-row';
+    row.className = 'message-row ' + (isOwn ? 'own' : 'other');
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    const author = document.createElement('span');
-    author.className = 'author';
-    author.textContent = msg.displayName || msg.from || '';
-    bubble.appendChild(author);
+    // Show author only for messages not sent by the current user
+    if (!isOwn) {
+      const author = document.createElement('span');
+      author.className = 'author';
+      author.textContent = msg.displayName || msg.from || '';
+      bubble.appendChild(author);
+    }
+    // Message content (may include HTML and images)
     let content = msg.content || '';
+    // Replace links to images with <img> tags
     content = content.replace(/<a href=\"(https?:[^\"]+)\"[^>]*>[^<]*<\/a>/g, (m, url) => {
       if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
         return `<img src="${url}" alt="image" />`;
       }
       return `<a href="${url}" target="_blank">${url}</a>`;
     });
+    // Insert images from media index if referenced
     const mediaMatch = content.match(/OriginalName v=\"([^\"]+)\"/);
     if (mediaMatch && mediaFiles[mediaMatch[1]]) {
       content += `<br><img src="${mediaFiles[mediaMatch[1]]}" alt="media" />`;
     }
+    // Add message content to the bubble
     const cont = document.createElement('span');
     cont.innerHTML = content;
     bubble.appendChild(cont);
+    // Add message time
     const time = document.createElement('span');
     time.className = 'time';
     time.textContent = formatDate(msg.originalarrivaltime || msg.version);
